@@ -5,11 +5,23 @@
   "main": "main.js",
   "scripts": {
     "test": "node main.js",
-    "start": "node main.js"
+    "start": "node ./main.js",
+    "start-dev": "nodemon ./main.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "mongodb": "^3.5.7",
+    "mongoose": "^5.9.12",
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "express-jwt": "^5.3.3",
+    "jsonwebtoken": "^8.5.1",
+    "rootpath": "^0.1.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.3"
   }
 }
