@@ -37,6 +37,13 @@ async function create(userParam) {
     if (await User.findOne({ username: userParam.username })) {
         throw 'Username "' + userParam.username + '" is already taken';
     }
+    if (userParam.email === undefined){
+        console.log(userParam.email);
+        throw 'Email must be defined!'
+    }
+    else if (await User.findOne({ email: userParam.email })) {
+        throw 'Email "' + userParam.email + '" is already used by another user';
+    }
 
     const user = new User(userParam);
 
@@ -56,6 +63,9 @@ async function update(id, userParam) {
     if (!user) throw 'User not found';
     if (user.username !== userParam.username && await User.findOne({ username: userParam.username })) {
         throw 'Username "' + userParam.username + '" is already taken';
+    }
+    if (user.email !== userParam.email && await User.findOne({ email: userParam.email })) {
+        throw 'Email "' + userParam.email + '" is already used by another user';
     }
 
     // hash password if it was entered

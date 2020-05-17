@@ -9,6 +9,7 @@ const log = (text) => {
 router.post('/create', createFirstPosition);
 router.get('/:id', getById);
 router.put('/:id', update);
+router.delete('/:id', _delete);
 
 module.exports = router;
 
@@ -29,6 +30,11 @@ function getById(req, res, next) {
 
 function update(req, res, next) {
     locationService.update(req.params.id, req.body)
+        .then(() => res.json({}))
+        .catch(err => next(err));
+}
+function _delete(req, res, next) {
+    locationService.delete(req.params.id)
         .then(() => res.json({}))
         .catch(err => next(err));
 }

@@ -20,9 +20,12 @@ function register(req, res, next) {
     userService.create(req.body)
         .then(() => {
             res.status(201).json({message: "User created successfully!", userDetails: req.body});
-            log("LOG: 201 User created successfully!")
+            log(" 201 User created successfully!")
         })
-        .catch(err => next(err));
+        .catch((err) => {
+            log(err);
+            next(err)
+        });
 }
 
 function getAll(req, res, next) {
