@@ -1,7 +1,10 @@
 ﻿const express = require('express');
 const router = express.Router();
 const userService = require('../../services/user.service');
-
+const chalk = require("chalk");
+const log = (text) => {
+    console.log(chalk.bgWhite.bold("LOG:") + (" " + text))
+};
 // routes
 router.post('/authenticate', authenticate);
 router.post('/register', register);
@@ -13,21 +16,32 @@ router.delete('/:id', _delete);
 
 module.exports = router;
 
-function authenticate(req, res, next) {
-    userService.authenticate(req.body)
-        .then(user => user ? res.json(user) : res.status(400).json({ message: 'Username or password is incorrect' }))
-        .catch(err => next(err));
-}
-
 function register(req, res, next) {
     userService.create(req.body)
-        .then(() => res.json({}))
+        .then(() => {
+            res.status(201).json({message: "User created successfully!", userDetails: req.body});
+            log("LOG: 201 User created successfully!")
+        })
         .catch(err => next(err));
 }
 
 function getAll(req, res, next) {
     userService.getAll()
         .then(users => res.json(users))
+        .catch(err => next(err));
+}
+
+function authenticate(req, res, next) {
+    userService.authenticate(req.body)
+        .then((user) => {
+            if (user) {
+                res.json(user);
+                log(" 200 User logged in!")
+            } else {
+                log(" 400 User logged in!");
+                res.status(400).json({message: "Username or password is incorrect"})
+            }
+        })
         .catch(err => next(err));
 }
 
