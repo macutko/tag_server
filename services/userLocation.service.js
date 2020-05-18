@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const db = require('models/db');
 const Location = db.UserLocation;
-
+const l = require("../utils/logging");
 module.exports = {
     getById,
     create,
@@ -15,22 +15,18 @@ async function getById(id) {
     return await Location.findById(id);
 }
 
-async function create(userParam) {
+async function create(locationParam, userID) {
     // validate
 
-    if (await Location.findOne({ username: userParam.username })) {
-        throw 'Username "' + userParam.username + '" is already taken';
+    if (await Location.findOne({user_id: userID})) {
+        throw 'This user already has a location object! We have a problem!';
     }
+    l.log({longitude:locationParam.longitude, latitude:locationParam.latitude,user_id: userID});
+    const location = new Location({longitude:locationParam.longitude, latitude:locationParam.latitude,user_id: userID});
 
-    const user = new User(userParam);
-
-    // hash password
-    if (userParam.password) {
-        user.hash = bcrypt.hashSync(userParam.password, 10);
-    }
 
     // save user
-    await user.save();
+    await location.save();
 }
 
 async function update(id, userParam) {
@@ -38,7 +34,7 @@ async function update(id, userParam) {
 
     // validate
     if (!user) throw 'User not found';
-    if (user.username !== userParam.username && await User.findOne({ username: userParam.username })) {
+    if (user.username !== userParam.username && await User.findOne({username: userParam.username})) {
         throw 'Username "' + userParam.username + '" is already taken';
     }
 

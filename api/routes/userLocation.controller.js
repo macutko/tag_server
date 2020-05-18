@@ -2,9 +2,7 @@ const express = require('express');
 const router = express.Router();
 const locationService = require('../../services/userLocation.service');
 const chalk = require("chalk");
-const log = (text) => {
-    console.log(chalk.bgWhite.bold("LOG:") + (" " + text))
-};
+const l = require("../../utils/logging")
 // routes
 router.post('/create', createFirstPosition);
 router.get('/:id', getById);
@@ -14,10 +12,10 @@ router.delete('/:id', _delete);
 module.exports = router;
 
 function createFirstPosition(req, res, next) {
-    locationService.create(req.body)
+    locationService.create(req.body, req.user.sub)
         .then(() => {
             res.status(201).json({message: "Location created successfully!", location: req.body});
-            log("LOG: 201 First location successfully!")
+            l.log(" 201 First location successfully!")
         })
         .catch(err => next(err));
 }
