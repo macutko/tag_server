@@ -1,10 +1,7 @@
 ﻿const express = require('express');
 const router = express.Router();
 const userService = require('../../services/user.service');
-const chalk = require("chalk");
-const log = (text) => {
-    console.log(chalk.bgWhite.bold("LOG:") + (" " + text))
-};
+const log = require('../../utils/logging');
 // routes
 router.post('/authenticate', authenticate);
 router.post('/register', register);
@@ -18,14 +15,19 @@ module.exports = router;
 
 function register(req, res, next) {
     userService.create(req.body)
-        .then(() => {
-            res.status(201).json({message: "User created successfully!", userDetails: req.body});
-            log(" 201 User created successfully!")
-        })
-        .catch((err) => {
-            log(err);
-            next(err)
-        });
+        .then(
+            (user) => {
+                if (user) {
+                    res.status(201).json({message: "User created successfully!", userDetails: user});
+                    log.log(" 201 User created successfully!")
+                } else {
+                    res.status(400);
+                    log.log(user)
+                }
+            }).catch((err) => {
+        log.log(err);
+        next(err)
+    });
 }
 
 function getAll(req, res, next) {
@@ -39,9 +41,9 @@ function authenticate(req, res, next) {
         .then((user) => {
             if (user) {
                 res.json(user);
-                log(" 200 User logged in!")
+                log.log(" 200 User logged in!")
             } else {
-                log(" 400 User logged in!");
+                log.log(" 400 User logged in!");
                 res.status(400).json({message: "Username or password is incorrect"})
             }
         })

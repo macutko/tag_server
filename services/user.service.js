@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const db = require('models/db');
 const User = db.User;
-
+const log = require('../utils/logging');
 module.exports = {
     authenticate,
     getAll,
@@ -13,10 +13,10 @@ module.exports = {
     delete: _delete
 };
 
-async function authenticate({ username, password }) {
-    const user = await User.findOne({ username });
+async function authenticate({username, password}) {
+    const user = await User.findOne({username});
     if (user && bcrypt.compareSync(password, user.hash)) {
-        const token = jwt.sign({ sub: user.id }, config.secret);
+        const token = jwt.sign({sub: user.id}, config.secret);
         return {
             ...user.toJSON(),
             token
@@ -34,14 +34,13 @@ async function getById(id) {
 
 async function create(userParam) {
     // validate
-    if (await User.findOne({ username: userParam.username })) {
+    if (await User.findOne({username: userParam.username})) {
         throw 'Username "' + userParam.username + '" is already taken';
     }
-    if (userParam.email === undefined){
+    if (userParam.email === undefined) {
         console.log(userParam.email);
         throw 'Email must be defined!'
-    }
-    else if (await User.findOne({ email: userParam.email })) {
+    } else if (await User.findOne({email: userParam.email})) {
         throw 'Email "' + userParam.email + '" is already used by another user';
     }
 
@@ -53,7 +52,16 @@ async function create(userParam) {
     }
 
     // save user
-    await user.save();
+    let r = undefined;
+    await user.save().then((new_user) => {
+        const token = jwt.sign({sub: new_user.id}, config.secret);
+        r = {
+            ...new_user.toJSON(),
+            token
+        };
+
+    });
+    return r;
 }
 
 async function update(id, userParam) {
@@ -61,10 +69,10 @@ async function update(id, userParam) {
 
     // validate
     if (!user) throw 'User not found';
-    if (user.username !== userParam.username && await User.findOne({ username: userParam.username })) {
+    if (user.username !== userParam.username && await User.findOne({username: userParam.username})) {
         throw 'Username "' + userParam.username + '" is already taken';
     }
-    if (user.email !== userParam.email && await User.findOne({ email: userParam.email })) {
+    if (user.email !== userParam.email && await User.findOne({email: userParam.email})) {
         throw 'Email "' + userParam.email + '" is already used by another user';
     }
 
