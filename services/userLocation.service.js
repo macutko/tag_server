@@ -32,12 +32,11 @@ async function create(locationParam, userID) {
 }
 
 async function update(userID, locationParam) {
-    const location = await Location.findById(userID);
+    const location = await Location.findOne({user_id: userID});
 
     // validate
     if (!location) throw new NoKeyInDB("Update function on location: ID wasn't found in the DB!");
 
-    l.log("got here");
     // copy userParam properties to user
     Object.assign(location, ({
         longitude: locationParam.longitude,
