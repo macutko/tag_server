@@ -6,7 +6,7 @@ const l = require("../../utils/logging")
 // routes
 router.post('/create', createFirstPosition);
 router.get('/:id', getById);
-router.put('/:id', update);
+router.put('/update', update);
 router.delete('/:id', _delete);
 
 module.exports = router;
@@ -27,7 +27,7 @@ function getById(req, res, next) {
 }
 
 function update(req, res, next) {
-    locationService.update(req.params.id, req.body)
+    locationService.update(req.user.sub, req.body)
         .then(() => res.json({}))
         .catch(err => next(err));
 }
