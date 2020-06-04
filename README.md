@@ -6,7 +6,6 @@ from ipconfig of your adapter that is currently on WAN (either eth or Wifi). The
 
 # Accessing the shared dev server. 
 
-the shared server DDNS is on domacanas.hopto.org <port and all to come> 
-
-For security reasons I will always update this server with the most uptodate version of the code, but souldnt server as a dev server, rather a test server. 
+the shared server DDNS is on domacanas.hopto.org:12358
+For security reasons I will always update this server with the most uptodate version of the code, but this server shouldnt be used as a dev server, rather a test server. 
 
