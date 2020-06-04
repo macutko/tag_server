@@ -7,7 +7,7 @@ const schema = new Schema({
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
     createdDate: { type: Date, default: Date.now },
-    email: {type: String, required:true} // # TODO add to other services thsi field
+    email: {type: String, required:true}
 });
 
 schema.set('toJSON', {

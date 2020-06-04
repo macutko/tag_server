@@ -1,8 +1,7 @@
-const config = require('config/config.json');
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcryptjs');
 const db = require('models/db');
 const Location = db.UserLocation;
+const l = require("../utils/logging");
+const NoKeyInDB = require("../utils/errors");
 
 module.exports = {
     getById,
@@ -15,42 +14,37 @@ async function getById(id) {
     return await Location.findById(id);
 }
 
-async function create(userParam) {
+async function create(locationParam, userID) {
     // validate
 
-    if (await Location.findOne({ username: userParam.username })) {
-        throw 'Username "' + userParam.username + '" is already taken';
+    if (await Location.findOne({user_id: userID})) {
+        throw 'This user already has a location object! We have a problem!';
     }
 
-    const user = new User(userParam);
+    const location = new Location({
+        longitude: locationParam.longitude,
+        latitude: locationParam.latitude,
+        user_id: userID
+    });
 
-    // hash password
-    if (userParam.password) {
-        user.hash = bcrypt.hashSync(userParam.password, 10);
-    }
-
-    // save user
-    await user.save();
+    // save
+    await location.save();
 }
 
-async function update(id, userParam) {
-    const user = await User.findById(id);
+async function update(userID, locationParam) {
+    const location = await Location.findOne({user_id: userID});
 
     // validate
-    if (!user) throw 'User not found';
-    if (user.username !== userParam.username && await User.findOne({ username: userParam.username })) {
-        throw 'Username "' + userParam.username + '" is already taken';
-    }
-
-    // hash password if it was entered
-    if (userParam.password) {
-        userParam.hash = bcrypt.hashSync(userParam.password, 10);
-    }
+    if (!location) throw new NoKeyInDB("Update function on location: ID wasn't found in the DB!");
 
     // copy userParam properties to user
-    Object.assign(user, userParam);
+    Object.assign(location, ({
+        longitude: locationParam.longitude,
+        latitude: locationParam.latitude,
+        user_id: userID
+    }));
 
-    await user.save();
+    await location.save();
 }
 
 async function _delete(id) {

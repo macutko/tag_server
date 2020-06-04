@@ -3,7 +3,8 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const db = require('models/db');
 const User = db.User;
-const log = require('../utils/logging');
+const l = require('../utils/logging');
+
 module.exports = {
     authenticate,
     getAll,
@@ -38,7 +39,6 @@ async function create(userParam) {
         throw 'Username "' + userParam.username + '" is already taken';
     }
     if (userParam.email === undefined) {
-        console.log(userParam.email);
         throw 'Email must be defined!'
     } else if (await User.findOne({email: userParam.email})) {
         throw 'Email "' + userParam.email + '" is already used by another user';

@@ -20,7 +20,9 @@
     "jsonwebtoken": "^8.5.1",
     "mongodb": "^3.5.7",
     "mongoose": "^5.9.12",
-    "rootpath": "^0.1.2"
+    "rootpath": "^0.1.2",
+    "socket.io": "^2.3.0",
+    "socketio-jwt": "^4.5.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.3"
