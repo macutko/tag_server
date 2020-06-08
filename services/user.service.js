@@ -3,12 +3,13 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const db = require('models/db');
 const User = db.User;
-const l = require('../utils/logging');
 
 module.exports = {
     authenticate,
     getAll,
     getById,
+    getByEmail,
+    getByUsername,
     create,
     update,
     delete: _delete
@@ -31,6 +32,16 @@ async function getAll() {
 
 async function getById(id) {
     return await User.findById(id);
+}
+
+async function getByEmail(value) {
+    const users = await User.find({"email": value});
+    return users[0];
+}
+
+async function getByUsername(value) {
+    const users = await User.find({"username": value});
+    return users[0];
 }
 
 async function create(userParam) {
