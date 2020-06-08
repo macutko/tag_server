@@ -43,7 +43,7 @@ function authenticate(req, res, next) {
                 res.json(user);
                 log.log(" 200 User logged in!")
             } else {
-                log.log(" 400 User logged in!");
+                log.log(" 400 User attempted login. Bad pass or Username");
                 res.status(400).json({message: "Username or password is incorrect"})
             }
         })
