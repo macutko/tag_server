@@ -1,10 +1,12 @@
 const chalk = require("chalk");
 log = (text) => {
-    console.log(chalk.bgWhite.bold("LOG:") + (" " + text))
+    let d = Date(Date.now())
+    console.log(chalk.bgWhite.bold(d.toString() + " LOG:") + (" " + text))
 };
 
 err = (text) => {
-    console.log(chalk.bgRed.bold("ERROR:") + (" " + text))
+    let d = Date(Date.now())
+    console.log(chalk.bgRed.bold(d.toString() + " ERROR:") + (" " + text))
 };
 
 
