@@ -7,6 +7,7 @@ router.post('/authenticate', authenticate);
 router.post('/register', register);
 router.get('/', getAll);
 router.get('/current', getCurrent);
+router.get('/exists', getByEmailOrUsername);
 router.get('/:id', getById);
 router.put('/:id', update);
 router.delete('/:id', _delete);
@@ -60,6 +61,19 @@ function getById(req, res, next) {
     userService.getById(req.params.id)
         .then(user => user ? res.json(user) : res.sendStatus(404))
         .catch(err => next(err));
+}
+
+function getByEmailOrUsername(req, res, next) {
+    if(req.query.email) {
+        userService.getByEmail(req.query.email)
+            .then(user => user ? res.json({"emailError": "Email already exists"}) : res.json())
+            .catch(err => next(err));
+    } else if (req.query.username){
+        userService.getByUsername(req.query.username)
+            .then(user => user ? res.json({"usernameError": "Username already exists"}) : res.json())
+            .catch(err => next(err));
+    }
+
 }
 
 function update(req, res, next) {
