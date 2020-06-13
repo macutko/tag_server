@@ -5,6 +5,7 @@ log = (text) => {
 };
 
 err = (text) => {
+    let d = Date(Date.now())
     console.log(chalk.bgRed.bold(d.toString() + " ERROR:") + (" " + text))
 };
 
