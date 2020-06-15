@@ -15,8 +15,8 @@ app.use(cors());
 app.use(jwt());
 
 // api routes
-app.use('/users', require('./api/routes/users.controller'));
-app.use('/location', require('./api/routes/userLocation.controller'));
+app.use('/users', require('./api/controllers/users.controller'));
+app.use('/location', require('./api/controllers/userLocation.controller'));
 
 // global error handler
 app.use(errorHandler);
@@ -34,8 +34,9 @@ io.on('connection', socketioJwt.authorize({
     timeout: 15000 // 15 seconds to send the authentication message
 })).on('authenticated', function (socket) {
     //this socket is authenticated, we are good to handle more events from it.
-    require('api/routes/IO_position.controller')(socket,io)
-    require('api/routes/io.controller')(socket)
+    require('api/controllers/sockets/position.controller')(socket,io)
+    require('api/controllers/sockets/chase.controller')(socket,io)
+    require('api/controllers/sockets/io.controller')(socket)
     l.log('User id connected ' + socket.decoded_token.sub);
 })
 
