@@ -22,7 +22,7 @@ app.use('/location', require('./api/controllers/userLocation.controller'));
 app.use(errorHandler);
 
 // start server
-const port = process.env.NODE_ENV === 'production' ? (process.env.PORT || 80) : (config.PORT || 4000);
+const port = process.env.NODE_ENV === 'production' ? (process.env.PORT || 8080) : (config.PORT || 4000);
 const server = require("http").createServer(app);
 const io = require("socket.io").listen(server);
 const socketioJwt = require('socketio-jwt');
