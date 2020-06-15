@@ -13,10 +13,6 @@ module.exports = function (socket, io) {
         l.log("Updating pos from socket ID: " + socket.id)
     });
 
-    socket.on('initiate_chase', (data) => {
-        l.log("CHASE IS ON BIIIIITCH!")
-        console.log(data)
-        io.to(data.socketID).emit('give_me_your_position')
-    });
+
 
 };
