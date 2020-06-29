@@ -11,9 +11,8 @@ module.exports = function (socket, io) {
             lat: data.latitude,
             username: data.username
         });
-        l.log("Updating pos from socket ID: " + socket.id)
+        l.log(`Updating pos from socket ID: ${socket.id} username: ${data.username} user id: ${socket.decoded_token.sub}`)
     });
-
 
 
 };
