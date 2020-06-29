@@ -1,31 +1,29 @@
 const chalk = require("chalk");
-let d = Date(Date.now())
 log = (text) => {
 
-    console.log(chalk.bgWhite.bold(d.toString() + " LOG:") + (" " + text))
+    console.log(chalk.bgWhite.bold(Date(Date.now()).toString() + " LOG:") + (" " + text))
 };
-escaped_chase = (socketID, username) => {
+escaped_chase = (senderUsername, username) => {
 
-    console.log(chalk.bgBlueBright.bold(d.toString() + " Escaped chase:") + (username + " escaped a chase on the socket ID:" + socketID))
+    console.log(chalk.bgCyanBright.bold(Date(Date.now()).toString() + " Escaped chase:") + (username + " escaped a chase with:" + senderUsername))
 };
 start_chase = (chaser, target) => {
 
-    console.log(chalk.bgBlueBright.bold(d.toString() + " Start chase:") + (chaser + " started a chase on user :" + target))
+    console.log(chalk.bgBlueBright.bold(Date(Date.now()).toString() + " Start chase:") + (chaser + " started a chase on user :" + target))
 };
 lost_chase = (loser, chaser) => {
 
-    console.log(chalk.bgRedBright.bold(d.toString() + " Lost chase:") + (loser + " has lost to " + chaser))
+    console.log(chalk.bgRedBright.bold(Date(Date.now()).toString() + " Lost chase:") + (loser + " has lost to " + chaser))
 }
 
 won_chase = (loser, chaser) => {
 
-    console.log(chalk.bgGreenBright.bold(d.toString() + " Won chase:") + (chaser + " has won over " + loser))
+    console.log(chalk.bgGreenBright.bold(Date(Date.now()).toString() + " Won chase:") + (chaser + " has won over " + loser))
 }
 
 
 err = (text) => {
-    let d = Date(Date.now())
-    console.log(chalk.bgRed.bold(d.toString() + " ERROR:") + (" " + text))
+    console.log(chalk.bgRed.bold(Date(Date.now()).toString() + " ERROR:") + (" " + text))
 };
 
 
