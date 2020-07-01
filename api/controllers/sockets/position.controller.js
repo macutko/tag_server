@@ -18,9 +18,9 @@ module.exports = function (socket, locations) {
             lat: data.latitude,
             username: data.username
         });
-        for (let key in locations.getUsers()) {
-            log(`Showing the current list of active users: ${locations.getUsers()[key].username}`)
-        }
+
+        log(`Showing the current list of active users: ${locations.getUsernames()}`)
+
 
     });
 
