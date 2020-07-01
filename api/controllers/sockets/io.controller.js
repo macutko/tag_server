@@ -8,7 +8,7 @@ module.exports = function (socket, locations) {
         socket.broadcast.emit('user_disconnected', {
             userID: socket.decoded_token.sub
         });
-        log(`disco ${locations}`)
-        log("Disconnecting")
+
+        log(`Disconnecting: current users: ${locations.getUsernames()}`)
     })
 };
