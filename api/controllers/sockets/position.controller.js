@@ -8,15 +8,11 @@ module.exports = function (socket, io) {
             socketID: socket.id,
             userID: socket.decoded_token.sub,
             long: data.longitude,
-            lat: data.latitude
+            lat: data.latitude,
+            username: data.username
         });
-        l.log("Updating pos from socket ID: " + socket.id)
+        l.log(`Updating pos from socket ID: ${socket.id} username: ${data.username} user id: ${socket.decoded_token.sub}`)
     });
 
-    socket.on('initiate_chase', (data) => {
-        l.log("CHASE IS ON BIIIIITCH!")
-        console.log(data)
-        io.to(data.socketID).emit('give_me_your_position')
-    });
 
 };
