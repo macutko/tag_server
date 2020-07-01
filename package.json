@@ -4,9 +4,13 @@
   "description": "Another server for another app",
   "main": "main.js",
   "scripts": {
-    "test": "node main.js",
-    "dev": "nodemon ./main.js",
-    "start": "node ./main.js"
+    "server": "node ./build/main.js",
+    "dev": "npm-run-all build server",
+    "build": "npm-run-all clean transpile",
+    "start": "node ./main.js",
+    "transpile": "babel ./ --out-dir build --ignore ./node_modules ./.idea",
+    "clean": "rimraf build",
+    "watch:dev": "nodemon"
   },
   "author": "",
   "license": "ISC",
@@ -25,6 +29,49 @@
     "socketio-jwt": "^4.5.0"
   },
   "devDependencies": {
-    "nodemon": "^2.0.3"
+    "nodemon": "^2.0.3",
+    "@babel/cli": "^7.10.3",
+    "@babel/core": "^7.10.3",
+    "@babel/plugin-proposal-class-properties": "^7.10.1",
+    "@babel/preset-env": "^7.10.3",
+    "@babel/plugin-transform-runtime": "^7.10.3",
+    "@babel/runtime": "^7.10.3",
+    "rimraf": "^3.0.2"
+  },
+  "babel": {
+    "presets": [
+      "@babel/preset-env"
+    ],
+    "plugins": [
+      [
+        "@babel/plugin-proposal-class-properties",
+        {
+          "loose": true
+        }
+      ],
+      [
+        "@babel/plugin-transform-runtime",
+        {
+          "regenerator": true
+        }
+      ]
+    ]
+  },
+  "nodemonConfig": {
+    "exec": "npm run dev",
+    "watch": [
+      "./api/*",
+      "./config/*",
+      "./models/*",
+      "./services/*",
+      "./utils/*",
+      "./main.js"
+    ],
+    "ignore": [
+      "**/node_modules/**",
+      "**/.idea/**",
+      "*.test.js",
+      "*.spec.js"
+    ]
   }
 }
