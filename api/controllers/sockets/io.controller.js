@@ -1,7 +1,14 @@
-const l = require('utils/logging')
+import {log} from "../../../utils/logging"
 
-module.exports = function(socket) {
-    socket.on('terminate', (socket) => {
-        l.log("Disconnecting")
+module.exports = function (socket, locations) {
+
+    socket.on('terminate', (data) => {
+
+        locations.removeUser(socket.decoded_token.sub)
+        socket.broadcast.emit('user_disconnected', {
+            userID: socket.decoded_token.sub
+        });
+        log(`disco ${locations}`)
+        log("Disconnecting")
     })
 };
