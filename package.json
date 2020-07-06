@@ -8,7 +8,7 @@
     "dev": "npm-run-all build server",
     "build": "npm-run-all clean transpile",
     "start": "node ./main.js",
-    "transpile": "babel ./ --out-dir build --ignore ./node_modules ./.idea",
+    "transpile": "babel ./ --out-dir build --ignore ./node_modules",
     "clean": "rimraf build",
     "watch:dev": "nodemon"
   },
