@@ -1,13 +1,26 @@
-import {start_chase, escaped_chase, lost_chase, won_chase} from "../../../utils/logging";
+import {start_chase, escaped_chase, lost_chase, won_chase, log} from "../../../utils/logging";
 
 module.exports = function (socket, io) {
 
-    socket.on('initiate_chase', (data) => {
-        start_chase(data.chaserUsername, data.targetUsername)
-        io.to(data.targetSocketID).emit('initiate_chase', {
+    socket.on('initiate_chase', (data, acknowledgmentFunction) => {
+
+        log(`${data.chaserUsername} is attempting a chase on ${data.targetUsername}`)
+
+        io.sockets.connected[data.targetSocketID].emit('initiate_chase', {
             chaserSocketID: data.chaserSocketID,
             chaserUsername: data.chaserUsername
+        }, (error, response) => {
+            if (response === true) {
+                // this means that the recieving end is happy to proceed
+                acknowledgmentFunction(null, true)
+                start_chase(data.chaserUsername, data.targetUsername)
+            } else {
+                acknowledgmentFunction(null, false)
+                log(`${data.chaserUsername} chase didn't start on ${data.targetUsername}`)
+            }
         })
+
+
     });
     socket.on('escaped_chase', (data) => {
         escaped_chase(data.meUsername, data.otherUsername)
