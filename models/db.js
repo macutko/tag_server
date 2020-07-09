@@ -13,4 +13,5 @@ mongoose.Promise = global.Promise;
 module.exports = {
     User: require('./user.model'),
     UserLocation: require('./userLocation.model'),
+    Error: require('./error.model')
 };

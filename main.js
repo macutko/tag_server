@@ -10,7 +10,6 @@ import {errorHandler} from './api/middlewares/error-handler'
 import {createServer} from "http"
 import listen from "socket.io"
 import {config} from './config/config.js'
-import {log} from './utils/logging'
 import {authorize} from "socketio-jwt"
 import {locationObject} from "./services/locationsSingleton.object";
 
@@ -24,6 +23,7 @@ app.use(jwt());
 // api routes
 app.use('/users', require('./api/controllers/users.controller'));
 app.use('/location', require('./api/controllers/userLocation.controller'));
+app.use('/client-error', require('./api/controllers/clientError.controller'));
 
 // global error handler
 app.use(errorHandler);

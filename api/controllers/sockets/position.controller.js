@@ -1,4 +1,4 @@
-import {log, error} from "../../../utils/logging";
+import {log} from "../../../utils/logging";
 
 module.exports = function (socket, locations) {
     socket.on('position_changed', (data) => {

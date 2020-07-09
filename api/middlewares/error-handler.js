@@ -1,31 +1,35 @@
 import {error} from "../../utils/logging"
+const {CustomError} = require("../../utils/errors");
+const errorService = require('../../services/error.service');
 
 export function errorHandler(err, req, res, next) {
+    let message, status;
     if (typeof (err) === 'string') {
         // custom application error
-        error(err.message);
-        return res.status(400).json({message:  "400" + err});
-    }
-
-    if (err.name === 'NoKeyInDB') {
-        error(err.message);
-        return res.status(500).json({message: "Internal server error! Please contact admin."});
-    }
-
-    if (err.name === 'ValidationError') {
+        status = 400
+        message = "400" + err.message
+    } else if (err.name === 'NoKeyInDB') {
+        status = 500
+        message = "Internal server error! Please contact admin."
+    } else if (err.name === 'ValidationError') {
         // mongoose validation error
-        error(err.message);
-        return res.status(400).json({message: "400" + err.message});
-    }
-
-    if (err.name === 'UnauthorizedError') {
+        status = 400
+        message = "400" + err.message
+    } else if (err.name === 'UnauthorizedError') {
         // jwt authentication error
-        error(err.message);
-        return res.status(401).json({message: 'Invalid Token or unknown URL'});
-
+        status = 401
+        message = 'Invalid Token or unknown URL'
+    } else {
+        // default to 500 server error
+        status = 500
+        message = err.message
     }
     error(err.message);
 
-    // default to 500 server error
-    return res.status(500).json({message: err.message});
+    const customErr = new CustomError(message, "EXCEPTION_SERVER")
+    errorService.create(customErr)
+        .then(() => {
+            return res.status(status).json({message: message});
+        })
+
 }

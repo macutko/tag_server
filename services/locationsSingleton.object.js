@@ -1,4 +1,4 @@
-import {error, log} from "../utils/logging";
+import {error} from "../utils/logging";
 
 let instance = null;
 
