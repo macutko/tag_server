@@ -21,9 +21,9 @@ app.use(cors());
 app.use(jwt());
 
 // api routes
-app.use('/users', require('./api/routes/users.controller'));
-app.use('/location', require('./api/routes/userLocation.controller'));
-app.use('/client-error', require('./api/routes/clientError.controller'));
+app.use('/users', require('./api/controllers/users.controller'));
+app.use('/location', require('./api/controllers/userLocation.controller'));
+app.use('/client-error', require('./api/controllers/clientError.controller'));
 
 // global error handler
 app.use(errorHandler);
