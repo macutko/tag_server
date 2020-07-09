@@ -1,7 +1,5 @@
-const db = require('models/db');
-const Location = db.UserLocation;
-const l = require("../utils/logging");
-const NoKeyInDB = require("../utils/errors");
+import {UserLocation as Location, User} from '../models/db'
+import {error as NoKeyInDB} from '../utils/logging'
 
 module.exports = {
     getById,

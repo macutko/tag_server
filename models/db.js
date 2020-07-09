@@ -1,5 +1,5 @@
-const config = require('config/config.json');
-const mongoose = require('mongoose');
+import {config} from "../config/config";
+import mongoose from 'mongoose'
 
 const connectionOptions = {
     useCreateIndex: true,

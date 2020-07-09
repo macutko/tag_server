@@ -1,12 +1,8 @@
-
+import {error} from "../../utils/logging"
 const {CustomError} = require("../../utils/errors");
-
-const l = require("../../utils/logging");
 const errorService = require('../../services/error.service');
 
-module.exports = errorHandler;
-
-function errorHandler(err, req, res, next) {
+export function errorHandler(err, req, res, next) {
     let message, status;
     if (typeof (err) === 'string') {
         // custom application error
@@ -23,16 +19,15 @@ function errorHandler(err, req, res, next) {
         // jwt authentication error
         status = 401
         message = 'Invalid Token or unknown URL'
-
     } else {
         // default to 500 server error
         status = 500
         message = err.message
     }
-    l.err(err.message);
+    error(err.message);
 
-    const error = new CustomError(message, "EXCEPTION_SERVER")
-    errorService.create(error)
+    const customErr = new CustomError(message, "EXCEPTION_SERVER")
+    errorService.create(customErr)
         .then(() => {
             return res.status(status).json({message: message});
         })

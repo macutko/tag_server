@@ -1,5 +1,4 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+import {Schema, model} from 'mongoose'
 
 const schema = new Schema({
     username: { type: String, unique: true, required: true },
@@ -19,4 +18,4 @@ schema.set('toJSON', {
     }
 });
 
-module.exports = mongoose.model('User', schema);
+module.exports = model('User', schema);
