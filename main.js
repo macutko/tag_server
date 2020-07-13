@@ -45,7 +45,7 @@ io.on('connection', authorize({
     require('./api/controllers/sockets/position.controller')(socket,locations)
     require('./api/controllers/sockets/chase.controller')(socket, io)
     require('./api/controllers/sockets/io.controller')(socket,locations)
-    io.to(socket.id).emit('initial_location_status',{locations:locations.getUsers()})
+    io.to(socket.id).emit('initial_location_status',{locations:locations.getUsers(socket.decoded_token.sub)})
 })
 
 server.listen(port, () => console.log("server running on port:" + port));

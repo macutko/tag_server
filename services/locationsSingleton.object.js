@@ -39,7 +39,13 @@ export class locationObject {
             error(e)
         }
     }
-    getUsers = () => {
+    getUsers = (currentUser = undefined) => {
+        if (currentUser !== undefined) {
+            let cop = this.users
+            delete cop[currentUser]
+
+            return cop
+        }
         return this.users
     }
     getUsernames = () => {
