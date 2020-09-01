@@ -5,7 +5,7 @@ module.exports = function (socket, io) {
     socket.on('initiate_chase', (data, acknowledgmentFunction) => {
 
         log(`${data.chaserUsername} is attempting a chase on ${data.targetUsername}`)
-
+        // TODO: wrap in try and catch in case of undefined socket -m eans we have a ghost
         io.sockets.connected[data.targetSocketID].emit('initiate_chase', {
             chaserSocketID: data.chaserSocketID,
             chaserUsername: data.chaserUsername
