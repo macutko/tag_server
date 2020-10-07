@@ -1,19 +1,14 @@
 {
-  "engines": {
-    "node": "12.17.0"
-  },
   "name": "server_v3",
   "version": "1.0.0",
   "description": "Another server for another app",
   "main": "main.js",
   "scripts": {
-    "server": "node ./build/main.js",
-    "dev": "npm-run-all build server",
-    "build": "npm-run-all clean transpile",
-    "start": "npm run build && node ./build/main.js",
-    "transpile": "babel ./ --out-dir build --ignore ./node_modules",
-    "clean": "rm -rf build && mkdir build",
-    "watch:dev": "nodemon"
+    "dev": "nodemon",
+    "build": "npm-run-all clean & babel ./ --out-dir build --ignore ./node_modules",
+    "start": "babel-node --trace-deprecation --presets '@babel/preset-env' ./main.js",
+    "clean": "rimraf build",
+    "watch:dev": "npm-run-all build && node ./build/main.js"
   },
   "author": "",
   "license": "ISC",
@@ -29,24 +24,23 @@
     "mongoose": "^5.9.12",
     "rootpath": "^0.1.2",
     "socket.io": "^2.3.0",
-    "socketio-jwt": "^4.5.0",
-    "@babel/preset-env": "^7.10.3",
+    "socketio-jwt": "^4.5.0"
+  },
+  "devDependencies": {
     "@babel/cli": "^7.10.3",
     "@babel/core": "^7.10.4",
     "@babel/node": "^7.10.4",
     "@babel/plugin-proposal-class-properties": "^7.10.1",
     "@babel/plugin-transform-runtime": "^7.10.3",
-    "@babel/runtime": "^7.10.3"
-  },
-  "devDependencies": {
+    "@babel/preset-env": "^7.10.3",
+    "@babel/runtime": "^7.10.3",
     "nodemon": "^2.0.3",
     "npm-run-all": "^4.1.5",
     "rimraf": "^3.0.2"
   },
   "babel": {
     "presets": [
-      "@babel/preset-env",
-      "@babel/preset-react"
+      "@babel/preset-env"
     ],
     "plugins": [
       [
@@ -64,7 +58,7 @@
     ]
   },
   "nodemonConfig": {
-    "exec": "npm run dev",
+    "exec": "npm run watch:dev",
     "watch": [
       "./api/*",
       "./config/*",

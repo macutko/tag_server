@@ -1,4 +1,4 @@
-import {start_chase, escaped_chase, lost_chase, won_chase, log} from "../../../utils/logging";
+import {start_chase, escaped_chase, lost_chase, won_chase, log} from "../../utils/logging";
 
 module.exports = function (socket, io) {
 

@@ -1,5 +1,5 @@
 import expressJwt from 'express-jwt'
-import {config} from '../../config/config.js'
+import {config} from '../../config.js'
 import userService from '../../services/user.service'
 
 
@@ -10,9 +10,9 @@ function jwt() {
     return expressJwt({secret, isRevoked}).unless({
         path: [
             // public routes that don't require authentication
-            '/users/authenticate',
-            '/users/register',
-            '/users/exists',
+            '/user/authenticate',
+            '/user/create',
+            '/user/exists',
             '/client-error/'
         ]
     });

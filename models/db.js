@@ -1,4 +1,4 @@
-import {config} from "../config/config";
+import {config} from "../config";
 import mongoose from 'mongoose'
 
 const connectionOptions = {
@@ -12,6 +12,8 @@ mongoose.Promise = global.Promise;
 
 module.exports = {
     User: require('./user.model'),
-    UserLocation: require('./userLocation.model'),
-    Error: require('./error.model')
+    Location: require('./location.model'),
+    Error: require('./error.model'),
+    Room: require('./room.model'),
+
 };
