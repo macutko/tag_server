@@ -23,5 +23,5 @@ export const won_chase = (loser, chaser) => {
 }
 
 export const error = (text) => {
-    console.log(chalk.bgRed.bold(Date(Date.now()).toString() + " ERROR:") + (" " + text))
+    console.log(chalk.bgRed.bold(`${Date(Date.now())} Error ${text}`))
 };

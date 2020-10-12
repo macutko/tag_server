@@ -1,42 +1,45 @@
+import {User as User} from '../../models/db'
+import {error, log} from "../../utils/logging";
+
 let instance = null;
 
 export class LocationsSingletonObject {
-    constructor() {
+    constructor(io) {
         if (!instance) {
             this.users = {}
-            // this.io = io
+            this.io = io
             instance = this;
         }
         return instance;
     }
 
 
-    // addUser = (data) => {
-    //     //first lets check somebody isnt trying to login twice
-    //     // if the user is already in the list, and the old socketID is still connected and
-    //     // the new socketID != old one
-    //     if ((data.key in this.users) && (this.io.sockets.connected[this.users[data.key].socketID])
-    //         && this.users[data.key].socketID !== data.socketID) {
-    //         // then dump the old socketID
-    //         this.io.sockets.connected[this.users[data.key].socketID].disconnect();
-    //     }
-    //
-    //
-    //     this.users[data.key] = {
-    //         socketID: data.socketID,
-    //         userID: data.userID,
-    //         long: data.long,
-    //         lat: data.lat,
-    //         username: data.username
-    //     }
-    // }
-    // removeUser = (userID) => {
-    //     try {
-    //         delete this.users[userID]
-    //     } catch (e) {
-    //         error(e)
-    //     }
-    // }
+    addOrAmendLocation = async (data) => {
+        // if the user is already playing but under a different socket id, kick the old socket
+
+        if ((data.userID in this.users) && this.users[data.userID].socketID !== data.socketID && this.io.sockets.connected[this.users[data.userID].socketID]) {
+            this.io.sockets.connected[this.users[data.userID].socketID].disconnect()
+        }
+
+        let user = await User.findById(data.userID)
+
+        this.users[data.userID] = {
+            socketID: data.socketID,
+            userID: data.userID,
+            currentPosition: data.currentPosition,
+            username: user.username
+        }
+        log(`${user.username} updated position, amount of user locations: ${Object.keys(this.users).length} and amount of sockets opened: ${Object.keys(this.io.sockets.connected).length}`)
+    }
+
+
+    removeUser = (userID) => {
+        try {
+            delete this.users[userID]
+        } catch (e) {
+            error(e)
+        }
+    }
     // getUsers = (currentUser = undefined) => {
     //     if (currentUser !== undefined) {
     //         let cop = this.users
@@ -46,12 +49,13 @@ export class LocationsSingletonObject {
     //     }
     //     return this.users
     // }
-    // getUsernames = () => {
-    //     let r = []
-    //     for (let key in this.users) {
-    //         r.push(this.users[key].username)
-    //     }
-    //     return r
+    getUsernames = () => {
+        let r = []
+        for (let key in this.users) {
+            r.push(this.users[key].username)
+        }
+        return r
+    }
 }
 
 

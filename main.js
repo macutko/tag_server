@@ -10,6 +10,9 @@ import {config} from './config.js'
 import {authorize} from "socketio-jwt";
 import {LocationsSingletonObject} from "./services/location/locationsSingleton.object";
 import {PositionHandler, positionChangeHandler} from "./api/sockets/position.io";
+import {log} from "./utils/logging";
+import {MainHandler} from "./api/sockets/main.io";
+import {RoomHandler} from "./api/sockets/room.io";
 
 const app = express();
 app.use(bodyParser.urlencoded({extended: false}));
@@ -33,20 +36,20 @@ const port = process.env.NODE_ENV === 'production' ? (process.env.PORT || 8080) 
 const server = createServer(app);
 const io = require('socket.io')(server);
 
-let locations = new LocationsSingletonObject()
-
+let locations = new LocationsSingletonObject(io) //TODO: make a rooms singleton that holds all the rooms which have the locations
 
 io.on('connection', authorize({
     secret: config.secret,
     timeout: 15000, // 15 seconds to send the authentication message
-    pingInterval: 10000,
-    pingTimeout: 3000,
+    pingInterval: 3000,
+    pingTimeout: 2000,
 })).on('authenticated', function (socket) {
-    console.log(`Helllo user id: ${socket.decoded_token.sub}`)
-
+    log(`New user connnected ${socket.decoded_token.sub}`)
     // Create event handlers for this socket
     let eventHandlers = {
+        room: new RoomHandler(socket,locations),
         position: new PositionHandler(socket, locations),
+        main: new MainHandler(socket,locations),
     };
 
     // Bind events to handlers
